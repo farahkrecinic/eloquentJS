@@ -40,7 +40,7 @@ var roads = [
       } else {
         let parcels = this.parcels.map(p => {
           if (p.place != this.place) return p;
-          return {place: destination, address: p.address, status: "pickedUp"};
+          return {place: destination, address: p.address, isPicked: 1};
         }).filter(p => p.place != p.address);
         return new VillageState(destination, parcels);
       }
@@ -57,46 +57,48 @@ var roads = [
 // console.log(nextNext.place);
 // console.log(nextNext.parcels);
 
+function randomPick(array) {
+  let choice = Math.floor(Math.random() * array.length);
+  return array[choice];
+}
+
 VillageState.random = function(parcelCount = 5) {
     let parcels = [];
     let startingPlace = "Post Office";
     for (let i = 0; i < parcelCount; i++) {
       let address = randomPick(Object.keys(roadGraph));
       let place;
-      let status = "waiting";
+      let isPicked = 0;
       do {
         place = randomPick(Object.keys(roadGraph));
-        status = (place == startingPlace) ? "pickedUp" : "waiting";
+        isPicked = (place == startingPlace) ? 1 : 0;
       } while (place == address);
-      parcels.push({place, address, status});
+      parcels.push({place, address, isPicked});
     }
     return new VillageState(startingPlace, parcels);
   };
 
-let fiveParcels = VillageState.random();
-console.log(fiveParcels.parcels);
-console.log(fiveParcels.place);
-//console.log(first.parcels);
-console.log('-------------------------------------------')
+//  let fiveParcels = VillageState.random();
+//  console.log(fiveParcels.parcels);
+//  console.log(fiveParcels.place);
+//  //console.log(first.parcels);
+//  console.log('-------------------------------------------')
 
 function runRobot(state, robotFunc, memory) {
     for (let turn = 0; ; turn++) {
       if (state.parcels.length == 0) {
-        console.log(`Done in ${turn} turns`);
-        break;
+        //console.log(`Done in ${turn} turns`);
+        return turn;
+        //break;
       }
       let action = robotFunc(state, memory);
       state = state.move(action.direction);
       memory = action.memory;
-      console.log(`Moving to ${action.direction}`);
-      console.log(`with ${state.parcels.filter(p => p.status=="pickedUp").length} of ${state.parcels.length} parcels to deliver`);
+      //console.log(`Moving to ${action.direction}`);
+      //console.log(`with ${state.parcels.filter(p => p.isPicked==1).length} of ${state.parcels.length} parcels to deliver`);
     }
   }
 
-function randomPick(array) {
-    let choice = Math.floor(Math.random() * array.length);
-    return array[choice];
-  }
   
   function randomRobot(state) {
     return {direction: randomPick(roadGraph[state.place])};
@@ -150,4 +152,4 @@ function randomPick(array) {
     return {direction: route[0], memory: route.slice(1)};
   }
 
-  runRobot(fiveParcels, goalOrientedRobot, []);
+ // runRobot(fiveParcels, goalOrientedRobot, []);

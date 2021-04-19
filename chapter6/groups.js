@@ -43,13 +43,13 @@ class Group{
 }
 
 let group = Group.from([10, 20, 10, 20, 20, 10]);
-group. displayAll();
+group.displayAll();
 console.log(group.has(10));
 // → true
 console.log(group.has(30));
 // → false
 group.add(10);
 group.delete(10);
-group. displayAll();
+group.displayAll();
 console.log(group.has(10));
 // → false

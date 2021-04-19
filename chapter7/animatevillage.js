@@ -126,5 +126,9 @@
       active = new Animation(worldState, robot, robotState)
     }
   })()
-
-runRobotAnimation(VillageState.random(), goalOrientedRobot, []);
+  let fiveParcels = VillageState.random();
+  console.log(fiveParcels.parcels);
+  console.log(fiveParcels.place);
+  //console.log(first.parcels);
+  console.log('-------------------------------------------')
+runRobotAnimation(fiveParcels, myRobot, []);
